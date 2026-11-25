@@ -1,0 +1,40 @@
+summary: 'Изолированный HTTP-прототип предложения оценки по одной рубрике и 12 синтетическим ответам.'
+method: 'Fake-проверки сервера и интерфейсного контракта; живые вызовы только по явной кнопке оператора, не выполнялись при разработке.'
+hypothesis_outcome: inconclusive
+observations:
+  - criterion_id: C01
+    assessment: not_measured
+    observed: 'Локальный HTTP API возвращает 12 ответов в fake-проверке; опубликованное демо не проверялось.'
+  - criterion_id: C02
+    assessment: supported
+    observed: 'Fake-проверки покрывают структуру, границы баллов, общие замечания и отклонение отсутствующей цитаты.'
+  - criterion_id: C03
+    assessment: not_measured
+    observed: 'Код интерфейса использует textContent; автоматическая проверка исследует исходный код, исполнение в браузере не проверено.'
+  - criterion_id: C04
+    assessment: supported
+    observed: 'Fake HTTP-проверка подтверждает явное решение и published=false; механизма публикации нет.'
+  - criterion_id: C05
+    assessment: supported
+    observed: 'Fake HTTP-проверка подтверждает отсутствие вызова при чтении и отказ после 15 явных попыток.'
+  - criterion_id: C06
+    assessment: supported
+    observed: 'Fake HTTP-проверки проверяют состояние not_run, метку fake и сохранение результатов и ошибок в отчёте.'
+problems:
+  - 'Живые вызовы и доступность модели не проверялись.'
+limitations:
+  - 'Двенадцать синтетических ответов не измеряют педагогическую пользу.'
+  - 'Публикация, рендеринг и взаимодействие в браузере не проверялись.'
+  - 'Состояние и лимит существуют только в памяти одного процесса.'
+env:
+  kind: host
+commands:
+  - name: fake-contract-checks
+    cmd: "python -m unittest discover -s experiments/4dbf92b6-c89e-4eed-b092-ebc593ff5ddb/demo -p 'test_*.py' -v"
+    timeout_s: 60
+demo:
+  kind: http
+  dockerfile: experiments/4dbf92b6-c89e-4eed-b092-ebc593ff5ddb/demo/Dockerfile
+  context: experiments/4dbf92b6-c89e-4eed-b092-ebc593ff5ddb/demo
+  port: 8080
+  health_path: /health
