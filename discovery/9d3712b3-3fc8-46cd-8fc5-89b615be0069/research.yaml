@@ -1,0 +1,157 @@
+{
+  "summary": "Предварительная доказательная база для EduPlatform: исходный запрос требует двух прикладных сервисов и ручного решения преподавателя; онлайн-документация подтверждает ограничения JSON-ответов DeepSeek и доставки Kafka. Рекомендации и эксперимент уточняются в следующей исследовательской редакции.",
+  "questions": [
+    "Как сохранить обязательный цикл трёх ролей, решений, оценок и их истории в узком MVP?",
+    "Какие отличающиеся идеи дополнительной ценности можно проверить без расширения первой версии?",
+    "Как разделить два сервиса и обеспечить надёжную асинхронную проверку через Kafka?",
+    "Как безопасно проверить DeepSeek для оценки по рубрике и комментариев к фрагментам?"
+  ],
+  "source_mode": "online",
+  "completeness": "partial",
+  "sources": [
+    {
+      "id": "frozen-request",
+      "title": "Frozen authoring inputs 0 — исходный запрос и ограничения",
+      "locator": "supplied:frozen-authoring-inputs-0.request.text",
+      "accessed_at": null,
+      "access": "read",
+      "excerpt": "Нужно исследовать и предложить концепцию учебной платформы EduPlatform.\n\nОбязательная основа:\n— Три роли: администратор, преподаватель, студент.\n— Администратор создаёт курсы и назначает преподавателей.\n— Преподаватель создаёт задания, просматривает решения и выставляет оценки.\n— Студент присоединяется к курсу, отправляет решения и получает обратную связь.\n— Решения, оценки и история их изменения сохраняются.\n\nАрхитектурные ограничения:\n— Один репозиторий.\n— Два прикладных сервиса: управление курсами и сервис проверок.\n— Допустимо несколько дополнительных прикладных сервисов, если их необходимость обоснована.\n— Взаимодействие для асинхронных проверок через Kafka.\n— Хранение данных в PostgreSQL.\n— Аутентификация через Keycloak.\n— Развёртывание в Kubernetes.\n— Исполнение студенческого кода в первую версию не входит.\n\nНаправление эксперимента:\nИИ-помощник через DeepSeek API предлагает оценку по рубрике\nи замечания с привязкой к конкретным фрагментам решения.\nОкончательное решение принимает преподаватель.\nСтуденческий текст считается недоверенными данными.\n\nПредложить несколько отличающихся идей дополнительной ценности.\nДля каждой описать пользовательский сценарий, пользу, сложность,\nриски и проверяемую гипотезу. Не раздувать первую версию.\n\nВыбрать рекомендуемую концепцию, выделить обязательный минимум,\nнеобязательные улучшения и отдельный небольшой эксперимент.\nНе начинать реализацию продукта.",
+      "excerpt_sha256": "971c543df75c73f337297f902fa6a658947b068240028c380f92258bb1f61720"
+    },
+    {
+      "id": "repository-baseline",
+      "title": "Локальный репозиторий на frozen commit 8290558c57b0083c358b8d490ec49c857286f4c4",
+      "locator": "git:8290558c57b0083c358b8d490ec49c857286f4c4:README.md",
+      "accessed_at": "2026-11-25T13:29:37.929734Z",
+      "access": "read",
+      "excerpt": "# edu-platform",
+      "excerpt_sha256": "39ae54f9ba075abebf48dc4b073bbbe84164c52f6d7a0f5b984406e1343eac78"
+    },
+    {
+      "id": "deepseek-json",
+      "title": "DeepSeek API Docs — JSON Output",
+      "locator": "https://api-docs.deepseek.com/guides/json_mode/",
+      "accessed_at": "2026-11-25T13:28:16.847375Z",
+      "access": "read",
+      "excerpt": "DeepSeek provides JSON Output to ensure the model outputs valid JSON strings.",
+      "excerpt_sha256": "25aa47c06d3e95bd32406e0359dd384089690a033cc3aa9ff484a5cd955a9a27"
+    },
+    {
+      "id": "deepseek-errors",
+      "title": "DeepSeek API Docs — Error Codes",
+      "locator": "https://api-docs.deepseek.com/quick_start/error_codes",
+      "accessed_at": "2026-11-25T13:28:17.435599Z",
+      "access": "read",
+      "excerpt": "Rate Limit Reached",
+      "excerpt_sha256": "d3b0ecfc6dfd2ac0f3b35a0543c6610d49dcff121d8a06e8464152137d5413a5"
+    },
+    {
+      "id": "owasp-injection",
+      "title": "OWASP — LLM Prompt Injection Prevention Cheat Sheet",
+      "locator": "https://cheatsheetseries.owasp.org/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.html",
+      "accessed_at": "2026-11-25T13:28:16.884053Z",
+      "access": "read",
+      "excerpt": "Input screening can flag known attack phrasing for logging, review, or rate limiting.",
+      "excerpt_sha256": "e70332f352d2d34fc8d0cff23c06adf9d847fe2b214f3d7741974de8f0aadac9"
+    },
+    {
+      "id": "kafka-semantics",
+      "title": "Apache Kafka — Design: Message Delivery Semantics",
+      "locator": "https://kafka.apache.org/41/design/design/",
+      "accessed_at": "2026-11-25T13:28:16.835799Z",
+      "access": "read",
+      "excerpt": "When writing to an external system, the limitation is in the need to coordinate the consumer’s position",
+      "excerpt_sha256": "ccd672bb39f51f35287f58538fa130e69d2852af360402510ec0c7e9ed0748b0"
+    },
+    {
+      "id": "postgres-transactions",
+      "title": "PostgreSQL — Transactions",
+      "locator": "https://www.postgresql.org/docs/current/tutorial-transactions.html",
+      "accessed_at": "2026-11-25T13:28:17.553668Z",
+      "access": "read",
+      "excerpt": "The essential point of a transaction is that it bundles multiple steps into a single, all-or-nothing operation.",
+      "excerpt_sha256": "734660ea0e3ca9b48a805ff4002b5e2dada9cb3a0f2c96cbe7f6e34fd605d98c"
+    },
+    {
+      "id": "keycloak-oidc",
+      "title": "Keycloak — Securing applications: OpenID Connect",
+      "locator": "https://www.keycloak.org/securing-apps/oidc-layers",
+      "accessed_at": "2026-11-25T13:28:16.855295Z",
+      "access": "read",
+      "excerpt": "The certificate endpoint returns the public keys enabled by the realm, encoded as a JSON Web Key (JWK).",
+      "excerpt_sha256": "951459dd39debe1e34361121d0228bf804681fcb69bfe03df1df7d8bb01e58e4"
+    },
+    {
+      "id": "kubernetes-deployment",
+      "title": "Kubernetes — Deployments",
+      "locator": "https://kubernetes.io/docs/concepts/workloads/controllers/deployment/",
+      "accessed_at": "2026-11-25T13:28:17.160932Z",
+      "access": "read",
+      "excerpt": "A Deployment manages a set of Pods to run an application workload, usually one that doesn't maintain state.",
+      "excerpt_sha256": "75ae03ef9d8a817c277ec15ce9b52a6a54270680409db70c6bddfe754bde9954"
+    },
+    {
+      "id": "moodle-rubrics",
+      "title": "Moodle Docs — Rubrics",
+      "locator": "https://docs.moodle.org/en/Rubrics",
+      "accessed_at": "2026-11-25T13:28:16.137819Z",
+      "access": "unavailable",
+      "excerpt": "",
+      "excerpt_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "findings": [
+    {
+      "text": "Frozen request фиксирует роли администратора, преподавателя и студента; курсы, назначения, задания, решения, оценки, обратную связь и сохранение истории обязательны.",
+      "category": "fact",
+      "sources": [
+        "frozen-request"
+      ]
+    },
+    {
+      "text": "Frozen request требует одного репозитория, двух прикладных сервисов, Kafka, PostgreSQL, Keycloak и Kubernetes; исполнение студенческого кода исключено.",
+      "category": "fact",
+      "sources": [
+        "frozen-request"
+      ]
+    },
+    {
+      "text": "На frozen commit 8290558c57b0083c358b8d490ec49c857286f4c4 отслеживается только README.md с заголовком edu-platform; реализации, зависимостей и иных материалов в дереве нет.",
+      "category": "fact",
+      "sources": [
+        "repository-baseline"
+      ]
+    },
+    {
+      "text": "Документация DeepSeek описывает JSON Output с response_format=json_object, требованием указать JSON в инструкции и возможным пустым ответом из пробелов. Валидный JSON не означает соответствие прикладной схеме или правильную оценку.",
+      "category": "fact",
+      "sources": [
+        "deepseek-json"
+      ]
+    },
+    {
+      "text": "Kafka отдельно оговаривает координацию позиции потребителя с результатом при записи во внешнюю систему; одной гарантии Kafka недостаточно для атомарности с PostgreSQL.",
+      "category": "fact",
+      "sources": [
+        "kafka-semantics"
+      ]
+    },
+    {
+      "text": "OWASP не считает фильтрацию текста границей безопасности и рекомендует внешнее ограничение полномочий и обработку вывода модели как недоверенных данных.",
+      "category": "fact",
+      "sources": [
+        "owasp-injection"
+      ]
+    }
+  ],
+  "limitations": [
+    "Это исследование концепции, а не реализация, интервью с пользователями или измерение качества DeepSeek.",
+    "Чтение Moodle Docs через curl вернуло HTTP 403; источник зарегистрирован как unavailable и не используется для выводов.",
+    "Разрешены только RESEARCH.md и research.yaml. HANDOFF.md и .orchestra/questions.jsonl не изменяются; вопросы и статус передачи находятся в этих двух файлах.",
+    "Время доступа supplied-источника отсутствует: accessed_at=null; даты публикации и доступ к API не выдумываются."
+  ],
+  "open_questions": [
+    "Для какого предмета, возраста и формата решения предназначен пилот? Рабочее допущение: короткие русскоязычные текстовые ответы взрослых студентов.",
+    "Допустима ли передача учебных ответов во внешний DeepSeek API и каковы требования к хранению? До выяснения — только синтетические материалы."
+  ]
+}
