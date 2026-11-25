@@ -30,7 +30,7 @@ env:
   kind: host
 commands:
   - name: fake-contract-checks
-    cmd: "python -m unittest discover -s experiments/4dbf92b6-c89e-4eed-b092-ebc593ff5ddb/demo -p 'test_*.py' -v"
+    cmd: "python3 -m unittest discover -s experiments/4dbf92b6-c89e-4eed-b092-ebc593ff5ddb/demo -p 'test_*.py' -v"
     timeout_s: 60
 demo:
   kind: http
