@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-94a994ceb1ae5b5b8144fea1c19ab66d
+  namespace: orchestra-demos
+  labels: &id001
+    orchestra.io/demo: demo-94a994ceb1ae5b5b8144fea1c19ab66d
+spec:
+  type: ClusterIP
+  selector: *id001
+  ports:
+  - port: 80
+    targetPort: 8080

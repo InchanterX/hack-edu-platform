@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-94a994ceb1ae5b5b8144fea1c19ab66d
+  namespace: orchestra-demos
+  labels: &id001
+    orchestra.io/demo: demo-94a994ceb1ae5b5b8144fea1c19ab66d
+spec:
+  replicas: 1
+  selector:
+    matchLabels: *id001
+  template:
+    metadata:
+      labels: *id001
+    spec:
+      automountServiceAccountToken: false
+      serviceAccountName: demo
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      imagePullSecrets:
+      - name: harbor-pull
+      containers:
+      - name: demo
+        image: registry.faberge-eggs.ru/hackathons/edu-platform/demo-94a994ceb1ae5b5b8144fea1c19ab66d@sha256:19f92579409097aa4c289ef418e182893fd3e9c0bcef2a3e7a620c53728e421b
+        ports:
+        - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 2
+          periodSeconds: 5
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 10001
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        env:
+        - name: DEEPSEEK_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: demo-evaluation
+              key: api-key
+              optional: false

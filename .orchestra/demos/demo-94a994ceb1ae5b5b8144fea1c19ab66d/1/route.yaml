@@ -1,0 +1,27 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: demo-94a994ceb1ae5b5b8144fea1c19ab66d
+  namespace: orchestra-demos
+  labels:
+    orchestra.io/demo: demo-94a994ceb1ae5b5b8144fea1c19ab66d
+spec:
+  parentRefs:
+  - name: home-gateway
+    namespace: default
+  hostnames:
+  - demo-94a994ceb1ae5b5b8144fea1c19ab66d.demo.faberge-eggs.ru
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: demo-94a994ceb1ae5b5b8144fea1c19ab66d
+      port: 80
+    filters:
+    - type: ResponseHeaderModifier
+      responseHeaderModifier:
+        set:
+        - name: X-Orchestra-Demo
+          value: demo-94a994ceb1ae5b5b8144fea1c19ab66d
