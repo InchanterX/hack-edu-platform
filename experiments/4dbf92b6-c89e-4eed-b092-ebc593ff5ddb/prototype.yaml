@@ -22,12 +22,16 @@ observations:
     observed: 'Fake HTTP-проверки проверяют состояние not_run, метку fake и сохранение результатов и ошибок в отчёте.'
 problems:
   - 'Живые вызовы и доступность модели не проверялись.'
+  - 'Предыдущие host-проверки завершились с кодом 127 из-за отсутствующего Python; теперь runtime явно задан через Compose.'
 limitations:
   - 'Двенадцать синтетических ответов не измеряют педагогическую пользу.'
   - 'Публикация, рендеринг и взаимодействие в браузере не проверялись.'
   - 'Состояние и лимит существуют только в памяти одного процесса.'
+  - 'Compose-конфигурация проверена; запуск контейнера и сборка демо локально не проверены из-за недоступного Docker daemon.'
 env:
-  kind: host
+  kind: compose
+  file: experiments/4dbf92b6-c89e-4eed-b092-ebc593ff5ddb/check.compose.yaml
+  service: checks
 commands:
   - name: fake-contract-checks
     cmd: "python3 -m unittest discover -s experiments/4dbf92b6-c89e-4eed-b092-ebc593ff5ddb/demo -p 'test_*.py' -v"
